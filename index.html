@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Single Plus™ — Birthday Edition</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Tahoma,Arial,sans-serif;background:#08080d;color:#fff}
+body{display:grid;place-items:center;overflow-x:hidden}
+.bg{position:fixed;inset:0;overflow:hidden;pointer-events:none}
+.bg i{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:.7;animation:twinkle 3s infinite}
+.bg i:nth-child(1){left:8%;top:18%}.bg i:nth-child(2){left:22%;top:72%;animation-delay:1s}.bg i:nth-child(3){left:70%;top:16%;animation-delay:.5s}.bg i:nth-child(4){left:87%;top:61%;animation-delay:1.5s}.bg i:nth-child(5){left:52%;top:84%;animation-delay:2s}.bg i:nth-child(6){left:35%;top:9%;animation-delay:.8s}
+@keyframes twinkle{50%{opacity:.15;transform:scale(2)}}
+.wrap{width:min(94vw,440px);padding:22px 0}
+.phone{background:#111119;border:1px solid #2a2a39;border-radius:38px;padding:10px;box-shadow:0 25px 80px #000;min-height:720px;position:relative;overflow:hidden}
+.screen{min-height:700px;border-radius:30px;padding:30px 22px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:radial-gradient(circle at 50% 0,#29223e 0,#11111a 42%,#09090e 100%)}
+.notch{position:absolute;top:13px;left:50%;transform:translateX(-50%);width:110px;height:24px;border-radius:20px;background:#050509;z-index:3}
+.badge{font-size:12px;color:#aaa;margin-bottom:18px;letter-spacing:1px}
+h1{font-size:29px;margin:8px 0 12px}h2{font-size:25px;margin:8px 0 14px}
+p{line-height:2;color:#d0ced8;margin:7px 0}.muted{color:#888;font-size:13px}
+input{width:100%;border:1px solid #3a394a;background:#0c0c13;color:#fff;border-radius:14px;padding:15px;font-size:16px;text-align:center;outline:none;margin:18px 0 10px}
+input:focus{border-color:#9b7cff;box-shadow:0 0 0 3px #9b7cff18}
+button{border:0;border-radius:14px;padding:14px 20px;background:#fff;color:#0b0b10;font-weight:bold;font-size:15px;cursor:pointer;transition:.2s}
+button:hover{transform:translateY(-2px)}button.dark{background:#252432;color:#fff;border:1px solid #3b394b}
+button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.actions{width:100%;display:flex;gap:10px;flex-direction:column}.error{height:25px;color:#ff8f9a;font-size:13px}
+.countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;width:100%;margin:16px 0}.countdown div{background:#ffffff09;border:1px solid #ffffff12;border-radius:14px;padding:10px 4px}.countdown b{display:block;font-size:22px}.countdown span{font-size:10px;color:#8e8b98}.expired{color:#9cf0bd;font-weight:bold}.card{width:100%;background:#ffffff08;border:1px solid #ffffff12;border-radius:20px;padding:18px;margin:14px 0}
+.option{display:block;width:100%;margin:9px 0;background:#181722;color:#fff;border:1px solid #302e40}
+.option.correct{border-color:#8ef0bb}.option.wrong{border-color:#ff7180}
+.progress{width:100%;height:5px;background:#242331;border-radius:9px;margin:10px 0 18px;overflow:hidden}.progress b{display:block;height:100%;background:#fff;width:33%}
+.box{font-size:92px;cursor:pointer;animation:float 2.4s ease-in-out infinite;margin:18px}
+@keyframes float{50%{transform:translateY(-9px) rotate(2deg)}}.shake{animation:shake .4s}.pop{animation:pop .5s}
+@keyframes shake{25%{transform:translateX(7px)}50%{transform:translateX(-7px)}75%{transform:translateX(5px)}}
+@keyframes pop{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.single{font-size:34px;margin:8px 0;color:#ff8b9d;text-shadow:0 0 25px #ff496655}.tag{display:inline-block;padding:7px 11px;border-radius:99px;background:#2b1820;color:#ffacb9;font-size:12px}
+.final{font-size:30px;line-height:1.5}.heart{font-size:44px;animation:heartbeat 1.2s infinite}@keyframes heartbeat{50%{transform:scale(1.16)}}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden}.confetti span{position:absolute;top:-20px;font-size:18px;animation:fall 3.2s linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(600deg);opacity:.2}}
+.small{font-size:11px;color:#6f6d79;margin-top:16px}
+</style>
+
+<style>
+html,body{height:100%;overflow:hidden!important;}
+body{display:grid;place-items:center;}
+.wrap{height:100dvh;display:grid;place-items:center;padding:10px 0;}
+.phone{height:min(94dvh,760px);min-height:0;}
+.screen{height:100%;min-height:0;overflow:hidden;}
+.actions{margin-top:10px;}
+</style>
+
+</head>
+<body>
+<div class="bg"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="wrap"><div class="phone"><div class="notch"></div><main class="screen" id="app"></main></div></div>
+<div class="confetti" id="confetti"></div>
+<script>
+const app=document.getElementById('app'), confetti=document.getElementById('confetti');
+const state={name:''};
+
+// Target: 19 Mehr 1405 at 18:00, Iran local time.
+// Iran is UTC+3:30 year-round in 2026, so the target is 2026-10-11T18:00:00+03:30.
+const targetTime = new Date('2026-10-11T18:00:00+03:30').getTime();
+let countdownTimer = null;
+
+function startCountdown(){
+  const update = () => {
+    const diff = Math.max(0, targetTime - Date.now());
+    const total = Math.floor(diff / 1000);
+    const days = Math.floor(total / 86400);
+    const hours = Math.floor((total % 86400) / 3600);
+    const mins = Math.floor((total % 3600) / 60);
+    const secs = total % 60;
+    const set = (id,val) => {
+      const el=document.getElementById(id);
+      if(el) el.textContent=String(val).padStart(2,'0');
+    };
+    set('dd',days); set('hh',hours); set('mm',mins); set('ss',secs);
+
+    const gateNext=document.getElementById('gateNext');
+    if(gateNext){
+      if(diff<=0){
+        gateNext.disabled=false;
+        gateNext.textContent='مرحله بعد ➜';
+        const label=document.querySelector('.badge');
+        if(label) label.textContent='TIME IS UP ✓';
+        if(countdownTimer){ clearInterval(countdownTimer); countdownTimer=null; }
+      }else{
+        gateNext.disabled=true;
+        gateNext.textContent='مرحله بعد 🔒';
+      }
+    }
+  };
+  update();
+  if(countdownTimer) clearInterval(countdownTimer);
+  countdownTimer=setInterval(update,1000);
+}
+
+function renderLogin(){
+app.innerHTML=`<div class="badge">⏳ WAIT</div>
+<h1>⏳</h1>
+<div class="countdown" id="countdown" aria-live="polite">
+<div><b id="dd">--</b><span>روز</span></div><div><b id="hh">--</b><span>ساعت</span></div><div><b id="mm">--</b><span>دقیقه</span></div><div><b id="ss">--</b><span>ثانیه</span></div>
+</div>
+<p>وقتی تایمر تموم شد سر بزن.</p>
+<div class="actions"><button id="gateNext" disabled>مرحله بعد 🔒</button></div>`;
+const gateNext=document.getElementById('gateNext');
+gateNext.onclick=()=>{ if(targetTime-Date.now()<=0){ renderNamePage(); } };
+startCountdown();
+}
+function renderNamePage(){
+app.innerHTML=`<div class="badge">ONE LITTLE THING</div>
+<h2>قبل از شروع... 😏</h2>
+<div class="card"><p>من خودم می‌دونم اسمت <b>ویان</b> هست.</p>
+<p>ولی حتماً باید خودت واردش کنی.</p>
+<p class="muted">چرا؟</p><p><b>چون دوست دارم اذیتت کنم. 😂</b></p></div>
+<input id="name" placeholder="اسمت رو وارد کن..." autocomplete="off">
+<div class="error" id="error"></div><div class="actions"><button id="go">تأیید هویت</button></div>`;
+document.getElementById('go').onclick=checkName;
+document.getElementById('name').addEventListener('keydown',e=>{if(e.key==='Enter')checkName()});
+}
+
+function checkName(){
+const v=document.getElementById('name').value.trim();
+if(!v){document.getElementById('error').textContent='حداقل اسم خودت رو وارد کن 😂';return}
+if(v.replace(/\s/g,'').toLowerCase()!=='ویان'){document.getElementById('error').textContent='❌ نه دیگه... خودت هم می‌دونی اسمت ویانه 😂';return}
+state.name='ویان';
+app.innerHTML=`<div class="badge">IDENTITY VERIFIED ✓</div><h1>ویان؟ 🤨</h1>
+<div class="card"><p>خب...</p><p><b>خودم می‌دونستم. 😂</b></p><p class="muted">ولی بالاخره واردش کردی. رضایت‌بخش بود.</p></div>
+<button id="next">برو مرحله بعد ←</button>`;
+document.getElementById('next').onclick=stage1;
+}
+function stage1(){
+app.innerHTML=`<div class="badge">مرحله ۱ از ۳</div><div class="progress"><b style="width:33%"></b></div>
+<h2>یک سؤال کاملاً حیاتی 🧐</h2><div class="card"><p>تاریخ تولدت کِیه؟</p>
+<button class="option" data-ok="1">۱۹ مهر</button><button class="option">هر وقت کادو بدن 😌</button><button class="option">نمی‌دونم، فقط ادامه بده 😂</button></div>`;
+document.querySelectorAll('.option').forEach(b=>b.onclick=()=>{if(b.dataset.ok){b.classList.add('correct');setTimeout(stage2,450)}else{b.classList.add('wrong');b.textContent='❌ جواب مشکوک بود 😂'}})
+}
+function stage2(){
+app.innerHTML=`<div class="badge">مرحله ۲ از ۳</div><div class="progress"><b style="width:66%"></b></div>
+<h2>سن سیستم 🧠</h2><div class="card"><p>امسال چند سالته؟</p>
+<button class="option" data-ok="1">۱۷</button><button class="option">۱۶، هنوز قبول نکردم 😭</button><button class="option">سن فقط یه عدده 😎</button></div>`;
+document.querySelectorAll('.option').forEach(b=>b.onclick=()=>{if(b.dataset.ok){b.classList.add('correct');setTimeout(stage3,450)}else{b.classList.add('wrong');b.textContent='❌ این یکی هم نه 😂'}})
+}
+function stage3(){
+app.innerHTML=`<div class="badge">مرحله ۳ از ۳</div><div class="progress"><b style="width:100%"></b></div>
+<h2>تقریباً رسیدی... 👀</h2><div class="card"><p>آخرین سؤال:</p><p><b>فکر می‌کنی کادوت واقعاً اینجاست؟</b></p>
+<button class="option" data-ok="1">آره 🎁</button><button class="option">نه، اینا همش نقشه‌ست 😂</button></div>`;
+document.querySelectorAll('.option').forEach(b=>b.onclick=()=>{if(b.dataset.ok){b.classList.add('correct');setTimeout(fakeGift,500)}else{b.classList.add('wrong');b.textContent='😂 حالا چرا بدبین شدی؟'}})
+}
+function fakeGift(){
+app.innerHTML=`<div class="badge">GIFT OPENED ✓</div>
+<div class="card pop"><div class="single">تولدم ۲۳ هست 🎂</div>
+<p>دقیقاً چهار روز دیگه.<br><b>یادت نره، منتظرم ❤️</b></p></div>
+<button id="wait">کادوی اصلی 🎁</button>`;
+document.getElementById('wait').onclick=realGift;
+}
+
+function realGift(){
+app.innerHTML=`<div class="badge">WAIT... THIS IS THE REAL ONE ❤️</div><div class="heart">❤️</div>
+<div class="card pop"><div class="final">تولدت مبارک ویان! 🎂</div>
+<p>شوخی به کنار...</p><p>شاید روی کاغذ دخترخاله باشی، ولی از وقتی یادمه با هم بزرگ شدیم و برای من همیشه مثل خواهر بودی.</p>
+<p>امیدوارم ۱۷ سالگیت پر از اتفاقای خوب، خنده‌های زیاد و کلی خاطره‌ی جدید باشه. ✨</p>
+<p><b>تولدت مبارک خواهرِ غیررسمی ❤️</b></p>
+<div class="card" style="margin-top:12px"><p>🍁 فقط یه خواهش کوچیک ازت دارم...</p><p><b>انقدر زود دلخور نشو لطفاً 😂❤️</b></p></div></div>
+<p class="small">19 MEHR • 17 YEARS • BIRTHDAY EDITION</p>`;
+makeConfetti();
+}
+function makeConfetti(){
+const chars=['🎉','✨','🎈','💜','🎂','⭐'];
+for(let i=0;i<35;i++){let s=document.createElement('span');s.textContent=chars[Math.floor(Math.random()*chars.length)];s.style.left=Math.random()*100+'%';s.style.animationDelay=Math.random()*1.5+'s';confetti.appendChild(s)}
+setTimeout(()=>confetti.innerHTML='',5000);
+}
+renderLogin();
+startCountdown();
+</script>
+</body>
+</html>
